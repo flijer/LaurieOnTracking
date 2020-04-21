@@ -72,18 +72,19 @@ def calc_player_velocities(team, smoothing=True, filter_='Savitzky-Golay', windo
                 # calculate second half velocity
                 vx.loc[second_half_idx:] = np.convolve( vx.loc[second_half_idx:] , ma_window, mode='same' ) 
                 vy.loc[second_half_idx:] = np.convolve( vy.loc[second_half_idx:] , ma_window, mode='same' ) 
-                
-        
+
         # put player speed in x,y direction, and total speed back in the data frame
         team[player + "_vx"] = vx
         team[player + "_vy"] = vy
         team[player + "_speed"] = np.sqrt( vx**2 + vy**2 )
+        team[player + "_speed_kmh"] = [x * (60 * 60) / 1000 for x in team[player + "_speed"]]
 
     return team
+
 
 def remove_player_velocities(team):
     # remove player velocoties and acceleeration measures that are already in the 'team' dataframe
     columns = [c for c in team.columns if c.split('_')[-1] in ['vx','vy','ax','ay','speed','acceleration']] # Get the player ids
     team = team.drop(columns=columns)
     return team
-    
+
