@@ -19,9 +19,10 @@ import Metrica_Viz as mviz
 import Metrica_Velocities as mvel
 import Metrica_PitchControl as mpc
 import numpy as np
+import matplotlib.pyplot as plt
 
 # set up initial path to data
-DATADIR = '/PATH/TO/WHERE/YOU/SAVED/THE/SAMPLE/DATA'
+DATADIR = 'C:/FcPythonDashboard/data_/tracking data/'
 game_id = 2 # let's look at sample match 2
 
 # read in the event data
@@ -56,17 +57,22 @@ mviz.plot_events( events.loc[820:823], color='k', indicators = ['Marker','Arrow'
 
 # first get model parameters
 params = mpc.default_model_params(3)
+frame_from =73600 #73600
+frame_to = 73600+50 #73600+500
+mviz.save_match_clip_pitch_control(frame_from, frame_to, events, tracking_home, tracking_away, params,'.',fname='pitch_control_test')
 
 # evaluated pitch control surface for first pass
-PPCF,xgrid,ygrid = mpc.generate_pitch_control_for_event(820, events, tracking_home, tracking_away, params, field_dimen = (106.,68.,), n_grid_cells_x = 50)
-mviz.plot_pitchcontrol_for_event( 820, events,  tracking_home, tracking_away, PPCF, xgrid, ygrid, annotate=True )
+# PPCF,xgrid,ygrid = mpc.generate_pitch_control_for_event(820, events, tracking_home, tracking_away, params, field_dimen = (106.,68.,), n_grid_cells_x = 50)
+# mviz.plot_pitchcontrol_for_event( 820, events,  tracking_home, tracking_away, PPCF, xgrid, ygrid, annotate=True )
+# plt.show()
 # evaluated pitch control surface for second pass
 PPCF,xgrid,ygrid = mpc.generate_pitch_control_for_event(821, events, tracking_home, tracking_away, params, field_dimen = (106.,68.,), n_grid_cells_x = 50)
 mviz.plot_pitchcontrol_for_event( 821, events,  tracking_home, tracking_away, PPCF, xgrid, ygrid, annotate=True )
+plt.show()
 # evaluated pitch control surface for third pass
-PPCF,xgrid,ygrid = mpc.generate_pitch_control_for_event(822, events, tracking_home, tracking_away, params, field_dimen = (106.,68.,), n_grid_cells_x = 50)
-mviz.plot_pitchcontrol_for_event( 822, events,  tracking_home, tracking_away, PPCF, xgrid, ygrid, annotate=True )
-
+# PPCF,xgrid,ygrid = mpc.generate_pitch_control_for_event(822, events, tracking_home, tracking_away, params, field_dimen = (106.,68.,), n_grid_cells_x = 100)
+# mviz.plot_pitchcontrol_for_event( 822, events,  tracking_home, tracking_away, PPCF, xgrid, ygrid, annotate=True )
+# plt.show()
 """ **** calculate pass probability for every home team succesful pass **** """
 # get all home passes
 home_passes = events[ (events['Type'].isin(['PASS'])) & (events['Team']=='Home') ]
@@ -105,6 +111,7 @@ print("Event following a risky (completed) pass")
 for p in pass_success_probability[:20]:
     outcome = events.loc[ p[0]+1 ].Type
     print( p[1], outcome )
+
 
 
 
