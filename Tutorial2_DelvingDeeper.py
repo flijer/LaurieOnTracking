@@ -48,6 +48,11 @@ mviz.save_match_clip(tracking_home.iloc[73600:73600+500],tracking_away.iloc[7360
 # Calculate player velocities
 tracking_home = mvel.calc_player_velocities(tracking_home,smoothing=True)
 tracking_away = mvel.calc_player_velocities(tracking_away,smoothing=True)
+# **** NOTE *****
+# if the lines above produce an error (happens for one version of numpy) change them to the lines below:
+# ***************
+#tracking_home = mvel.calc_player_velocities(tracking_home,smoothing=True,filter_='moving_average')
+#tracking_away = mvel.calc_player_velocities(tracking_away,smoothing=True,filter_='moving_average')
 
 # plot a random frame, plotting the player velocities using quivers
 mviz.plot_frame( tracking_home.loc[10000], tracking_away.loc[10000], include_player_velocities=True, annotate=True)
